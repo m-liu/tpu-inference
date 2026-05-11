@@ -57,7 +57,7 @@ def main():
                         help="Tensor parallel size.")
     parser.add_argument("--max-num-seqs",
                         type=int,
-                        default=128,
+                        default=112,
                         help="Max number of sequences.")
     parser.add_argument("--input-len",
                         type=int,
@@ -65,7 +65,7 @@ def main():
                         help="Input prompt length.")
     parser.add_argument("--output-len",
                         type=int,
-                        default=9 * 1024,
+                        default=10 * 1024,
                         help="Output generation length.")
     parser.add_argument("--generation-config",
                         type=str,
@@ -78,7 +78,7 @@ def main():
     parser.add_argument("--seed", type=int, default=42, help="Random seed.")
     parser.add_argument("--num-prompts",
                         type=int,
-                        default=1024,
+                        default=896,
                         help="Number of prompts to process.")
     parser.add_argument("--num-hidden-layers",
                         type=int,
@@ -87,7 +87,7 @@ def main():
     parser.add_argument(
         "--profiler-trigger-kv-len",
         type=int,
-        default=9 * 1024 - 50,
+        default=9 * 1024,
         help=
         "Trigger profiling when batch size is max-num-seq * tp-size, all q len is 1, and all kv len >= this value."
     )
@@ -101,6 +101,10 @@ def main():
                         type=str,
                         default="fp4",
                         help="MOE requantize weight dtype.")
+    parser.add_argument("--moe-all-gather-activation-dtype",
+                        type=str,
+                        default="fp8",
+                        help="MOE all gather activation dtype.")
     parser.add_argument("--new-model-design",
                         type=str,
                         default="1",
@@ -119,7 +123,7 @@ def main():
                         help="KV cache dtype.")
     parser.add_argument("--gpu-memory-utilization",
                         type=float,
-                        default=0.95,
+                        default=0.96,
                         help="GPU memory utilization.")
     parser.add_argument("--enable-prefix-caching",
                         action="store_true",
@@ -134,7 +138,7 @@ def main():
         "--additional-config",
         type=str,
         default=
-        '{"sharding": {"sharding_strategy": {"enable_dp_attention": true}}}',
+        '{"compilation_sizes": [896], "sharding": {"sharding_strategy": {"enable_dp_attention": true}}}',
         help="Additional config as JSON string.")
     parser.add_argument("--no-ignore-eos",
                         action="store_false",
@@ -156,6 +160,8 @@ def main():
     os.environ["MOE_REQUANTIZE_BLOCK_SIZE"] = args.moe_requantize_block_size
     os.environ[
         "MOE_REQUANTIZE_WEIGHT_DTYPE"] = args.moe_requantize_weight_dtype
+    os.environ[
+        "MOE_ALL_GATHER_ACTIVATION_DTYPE"] = args.moe_all_gather_activation_dtype
     os.environ["NEW_MODEL_DESIGN"] = args.new_model_design
     os.environ[
         "FORCE_MOE_RANDOM_ROUTING"] = "1" if args.force_moe_random_routing else "0"
