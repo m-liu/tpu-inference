@@ -20,7 +20,7 @@ import numpy as np
 from jax._src import dtypes
 from jax.sharding import Mesh, NamedSharding, PartitionSpec
 
-import tpu_inference.kernels.mla.v1.kernel as mla
+import tpu_inference.kernels.mla.v2.kernel as mla
 import tpu_inference.kernels.ragged_paged_attention.v3.kernel as rpa
 import tpu_inference.kernels.ragged_paged_attention.v3.kernel_hd64 as rpa_hd64
 from tpu_inference import utils
