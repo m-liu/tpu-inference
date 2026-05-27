@@ -85,7 +85,7 @@ def get_kv_cache_shape(
     page_size,
     kv_dim,
     kv_dtype,
-    kv_packing: int | None = None,
+    kv_packing: int | None = 32,
 ):
     if kv_packing is None:
         kv_packing = get_dtype_packing(kv_dtype)
