@@ -91,6 +91,18 @@ def main():
         help=
         "Trigger profiling when batch size is max-num-seq * tp-size, all q len is 1, and all kv len >= this value."
     )
+    parser.add_argument(
+        "--profile-prefill",
+        action="store_true",
+        help="Trigger profiling on prefill steps."
+    )
+    parser.add_argument(
+        "--profile-prefill-steps",
+        type=int,
+        default=3,
+        help="Number of prefill steps to profile."
+    )
+
 
     # New arguments aligned with user command
     parser.add_argument("--moe-requantize-block-size",
@@ -253,6 +265,14 @@ def main():
     profile_triggered = False
     profile_steps = 0
     profiled_steps_logs = []
+
+    if args.profile_prefill:
+        print("Starting profile for prefill steps...")
+        engine.start_profile()
+        profile_started = True
+        profile_triggered = True
+        profile_steps = args.profile_prefill_steps
+
 
     while engine.has_unfinished_requests():
         start = time.time()
