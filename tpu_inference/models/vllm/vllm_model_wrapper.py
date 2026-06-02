@@ -290,7 +290,7 @@ class VllmModelWrapper:
                 "post_spmd_conservative",
                 "xla_tpu_reduce_scatter_collective_matmul_mode":
                 "post_spmd_conservative",
-                "xla_tpu_use_minor_sharding_for_major_trivial_input": "true"
+                #"xla_tpu_use_minor_sharding_for_major_trivial_input": "true"
             },
             static_argnames=(
                 "layer_name_to_kvcache_index",
